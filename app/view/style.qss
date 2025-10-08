@@ -1,0 +1,49 @@
+/* Thème sobre et professionnel */
+QWidget {
+    background-color: #f5f7fa;
+    color: #222;
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 12px;
+}
+
+QLabel#title_label {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0b3d91;
+}
+
+QPushButton {
+    background-color: #0b3d91;
+    color: white;
+    border-radius: 6px;
+    padding: 6px 12px;
+}
+QPushButton:hover {
+    background-color: #0e4fb2;
+}
+QPushButton:disabled {
+    background-color: #c3cde6;
+    color: #666;
+}
+
+QLineEdit, QComboBox {
+    background-color: white;
+    border: 1px solid #d0d7e6;
+    border-radius: 4px;
+    padding: 6px;
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 20px;
+}
+
+QStackedWidget {
+    background: transparent;
+}
+
+/* Harmonisation des IntegerLineEdit via QLineEdit */
+QLineEdit[role="integer"] {
+    text-align: center;
+}
