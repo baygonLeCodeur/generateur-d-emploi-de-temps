@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+.venv/
+env/
+venv/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Editor / OS files
+.DS_Store
+.vscode/
+
+# Generated PDFs and outputs
+*.pdf
+
+# Test artifacts
+/.pytest_cache/
+
+# Other
+run_headless.py
