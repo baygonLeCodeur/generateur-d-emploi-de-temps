@@ -38,4 +38,20 @@ Pour créer et activer un environnement virtuel (recommandé) :
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate  # macOS / Linux / zsh
-python
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
+
+Exécuter la suite de tests dans le venv :
+
+```bash
+pytest -q
+```
+
+Si tu utilises VS Code, ouvre le dossier du projet après avoir activé le venv, ou utilise la configuration fournie dans `.vscode/settings.json` qui pointe vers `.venv/bin/python`. Cela aidera Pylance à résoudre les imports comme `pytest`.
+
+
+Fichiers ajoutés
+-----------------
+- `app/` : structure légère MVC (`model`, `view`, `controller`) pour faciliter la refactorisation.
+- `run_headless.py` : script de test minimal pour exécuter le moteur sans UI.

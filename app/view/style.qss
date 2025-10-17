@@ -34,9 +34,8 @@ QLineEdit, QComboBox {
 }
 
 QComboBox::drop-down {
-    subcontrol-origin: padding;
-    subcontrol-position: top right;
     width: 20px;
+    border: none;
 }
 
 QStackedWidget {

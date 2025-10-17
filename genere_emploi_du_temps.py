@@ -3,8 +3,38 @@ from itertools import permutations
 from pdfLibrary import LesEmploisDeTpsClasses
 from les_dependances import prog_deux_heures, prog_une_heure, la_salle_dediee, emplois_du_temps_classes_or, emplois_du_temps_profs_or, emplois_du_temps_salles_or
 from mes_dictionnaires import Les_interfaces
+# tenter d'utiliser le nouveau solveur CSP heuristique si disponible
+try:
+    from app.solver.csp_solver import solve_emplois
+except Exception:
+    solve_emplois = None
+from app.model.validation import validate_for_generation, ValidationError
 
 def genere_emploi_du_temps():
+    # Valider les préconditions
+    try:
+        validate_for_generation()
+    except ValidationError as e:
+        # afficher l'erreur et sortir proprement
+        print(f"Erreur de validation avant génération : {e}")
+        return
+
+    # première tentative : solver CSP heuristique (plus efficace)
+    if solve_emplois is not None:
+        try:
+            res = solve_emplois(emplois_du_temps_classes_or, emplois_du_temps_profs_or, emplois_du_temps_salles_or)
+            if res is not None:
+                emplois_du_temps_classes, emplois_du_temps_profs, edt_salles = res
+                # génération PDF et sortie
+                lesEmploisDeTpsClasses = LesEmploisDeTpsClasses()
+                for classe in emplois_du_temps_classes:
+                    lesEmploisDeTpsClasses.rediger_edt(classe, emplois_du_temps_classes[classe])
+                lesEmploisDeTpsClasses.output("lesEmploisDeTpsClasses.pdf")
+                return
+        except Exception:
+            # si le solveur échoue, on retombe sur l'algorithme original
+            pass
+
     emplois_du_temps_classes = copy.deepcopy(emplois_du_temps_classes_or)
     emplois_du_temps_profs = copy.deepcopy(emplois_du_temps_profs_or)
     edt_salles = copy.deepcopy(emplois_du_temps_salles_or)

@@ -23,11 +23,17 @@ class WorkForm(QMainWindow):
         
         
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    workForm = WorkForm()
-    saisie_nbresClasses = Saisie_nombres_de_classes("RENSEIGNEZ LES NOMBRES DE CLASSES PAR NIVEAU ET LE NOMBRE DE SALLES DE CLASSE", workForm)
-    workForm.WFStackedWidget.addWidget(saisie_nbresClasses)
-    workForm.WFStackedWidget.setCurrentWidget(saisie_nbresClasses)
-    workForm.setFixedHeight(300)
-    workForm.show()
-    sys.exit(app.exec())
+    try:
+        # Preferer le contrôleur MVC si présent
+        from app.controller import main as mvc_main
+        sys.exit(mvc_main())
+    except Exception:
+        # fallback : comportement historique
+        app = QApplication(sys.argv)
+        workForm = WorkForm()
+        saisie_nbresClasses = Saisie_nombres_de_classes("RENSEIGNEZ LES NOMBRES DE CLASSES PAR NIVEAU ET LE NOMBRE DE SALLES DE CLASSE", workForm)
+        workForm.WFStackedWidget.addWidget(saisie_nbresClasses)
+        workForm.WFStackedWidget.setCurrentWidget(saisie_nbresClasses)
+        workForm.setFixedHeight(300)
+        workForm.show()
+        sys.exit(app.exec())
