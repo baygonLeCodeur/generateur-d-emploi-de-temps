@@ -1,0 +1,221 @@
+{
+    "niveaux_classes": {
+        "TleA1": [
+            "TleA1 1"
+        ],
+        "TleA2": [
+            "TleA2 1"
+        ],
+        "TleD": [
+            "TleD 1",
+            "TleD 2",
+            "TleD 3"
+        ],
+        "3eme": [
+            "3eme 1",
+            "3eme 2",
+            "3eme 3",
+            "3eme 4",
+            "3eme 5",
+            "3eme 6",
+            "3eme 7"
+        ],
+        "6eme": [
+            "6eme 1",
+            "6eme 2",
+            "6eme 3",
+            "6eme 4"
+        ],
+        "5eme": [
+            "5eme 1",
+            "5eme 2",
+            "5eme 3",
+            "5eme 4",
+            "5eme 5"
+        ],
+        "4eme": [
+            "4eme 1",
+            "4eme 2",
+            "4eme 3",
+            "4eme 4"
+        ],
+        "2ndeA": [
+            "2ndeA 1",
+            "2ndeA 2",
+            "2ndeA 3"
+        ],
+        "2ndeC": [
+            "2ndeC 1",
+            "2ndeC 2",
+            "2ndeC 3"
+        ],
+        "1ereA1": [
+            "1ereA1 1"
+        ],
+        "1ereA2": [
+            "1ereA2 1"
+        ],
+        "1ereD": [
+            "1ereD 1",
+            "1ereD 2",
+            "1ereD 3"
+        ]
+    },
+    "salles": [
+        "S1",
+        "S2",
+        "S3",
+        "S4",
+        "S5",
+        "S6",
+        "S7",
+        "S8",
+        "S9",
+        "S10",
+        "S11",
+        "S12",
+        "S13",
+        "S14",
+        "S15",
+        "S16",
+        "S17",
+        "S18",
+        "S19",
+        "S20",
+        "S21"
+    ],
+    "devoirs_de_niveaux": {},
+    "salles_devoir_de_niveau": {},
+    "repartition_classes": {
+        "MATHS": {
+            "MATHS_01": [],
+            "MATHS_02": [],
+            "MATHS_03": [],
+            "MATHS_04": [],
+            "MATHS_05": [],
+            "MATHS_06": [],
+            "MATHS_07": []
+        },
+        "PHYS": {
+            "PHYS_01": [],
+            "PHYS_02": [],
+            "PHYS_03": [],
+            "PHYS_04": [],
+            "PHYS_05": []
+        },
+        "FRAN": {
+            "FRAN_01": [],
+            "FRAN_02": [],
+            "FRAN_03": [],
+            "FRAN_04": [],
+            "FRAN_05": [],
+            "FRAN_06": [],
+            "FRAN_07": []
+        },
+        "ANGL": {
+            "ANGL_01": [],
+            "ANGL_02": [],
+            "ANGL_03": [],
+            "ANGL_04": [],
+            "ANGL_05": [],
+            "ANGL_06": []
+        },
+        "SVT": {
+            "SVT_01": [],
+            "SVT_02": [],
+            "SVT_03": [],
+            "SVT_04": []
+        },
+        "HGEO": {
+            "HGEO_01": [],
+            "HGEO_02": [],
+            "HGEO_03": [],
+            "HGEO_04": [],
+            "HGEO_05": [],
+            "HGEO_06": []
+        },
+        "LV2": {
+            "LV2_01": [],
+            "LV2_02": [],
+            "LV2_03": []
+        },
+        "PHIL": {
+            "PHIL_01": [],
+            "PHIL_02": []
+        },
+        "ART": {},
+        "EPS": {
+            "EPS_01": [],
+            "EPS_02": [],
+            "EPS_03": [],
+            "EPS_04": []
+        },
+        "EDHC": {}
+    },
+    "noms_professeurs": {
+        "MATHS": {
+            "MATHS_01": "",
+            "MATHS_02": "",
+            "MATHS_03": "",
+            "MATHS_04": "",
+            "MATHS_05": "",
+            "MATHS_06": "",
+            "MATHS_07": ""
+        },
+        "PHYS": {
+            "PHYS_01": "",
+            "PHYS_02": "",
+            "PHYS_03": "",
+            "PHYS_04": "",
+            "PHYS_05": ""
+        },
+        "FRAN": {
+            "FRAN_01": "",
+            "FRAN_02": "",
+            "FRAN_03": "",
+            "FRAN_04": "",
+            "FRAN_05": "",
+            "FRAN_06": "",
+            "FRAN_07": ""
+        },
+        "ANGL": {
+            "ANGL_01": "",
+            "ANGL_02": "",
+            "ANGL_03": "",
+            "ANGL_04": "",
+            "ANGL_05": "",
+            "ANGL_06": ""
+        },
+        "SVT": {
+            "SVT_01": "",
+            "SVT_02": "",
+            "SVT_03": "",
+            "SVT_04": ""
+        },
+        "HGEO": {
+            "HGEO_01": "",
+            "HGEO_02": "",
+            "HGEO_03": "",
+            "HGEO_04": "",
+            "HGEO_05": "",
+            "HGEO_06": ""
+        },
+        "LV2": {
+            "LV2_01": "",
+            "LV2_02": "",
+            "LV2_03": ""
+        },
+        "PHIL": {
+            "PHIL_01": "",
+            "PHIL_02": ""
+        },
+        "ART": {},
+        "EPS": {
+            "EPS_01": "",
+            "EPS_02": "",
+            "EPS_03": "",
+            "EPS_04": ""
+        },
+        "EDHC": {}
+    }
+}

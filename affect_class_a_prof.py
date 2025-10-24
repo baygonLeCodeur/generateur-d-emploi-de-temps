@@ -140,6 +140,10 @@ class Affect_class_a_prof(QWidget):
         self.combo.clear()
         for prof in Les_interfaces.noms_professeurs[self.matiere]:
             self.combo.addItem(Les_interfaces.noms_professeurs[self.matiere][prof])
+        # Sélectionner automatiquement le premier prof si disponible
+        if self.combo.count() > 0:
+            self.combo.setCurrentIndex(0)
+            self.on_combo_text_changed(self.combo.currentText())
     
     @Slot(str)
     def on_combo_text_changed(self, text):
@@ -156,6 +160,15 @@ class Affect_class_a_prof(QWidget):
                 if Les_interfaces.noms_professeurs[self.matiere][prof] == text:
                     les_classes_du_prof = Les_interfaces.repartition_classes[self.matiere][prof]
                     self.combo_retrait.addItems(les_classes_du_prof)
+                    break
+            # Pré-remplir les combos avec les données sauvegardées
+            for prof in Les_interfaces.noms_professeurs[self.matiere]:
+                if Les_interfaces.noms_professeurs[self.matiere][prof] == text:
+                    classes_affectees = Les_interfaces.repartition_classes[self.matiere][prof]
+                    for classe in classes_affectees:
+                        if classe in self.classes_par_matiere[self.matiere]:
+                            self.classes_par_matiere[self.matiere].remove(classe)
+                            self.combo_retrait.addItem(classe)
                     break
             self.update_vh_label()
     
@@ -221,10 +234,16 @@ class Affect_class_a_prof(QWidget):
                 self.casser_boucle = True
                 break
         if not self.casser_boucle:
+            # Sauvegarder les données après cette étape (avant génération)
+            Les_interfaces.save_data()
             genere_emploi_du_temps()
     
     def precedent(self):
-         self.mainForm.WFStackedWidget.setCurrentWidget(self.prevComponent)
+        # Réinitialiser les affectations de classes aux professeurs
+        for matiere in Les_interfaces.repartition_classes:
+            for prof in Les_interfaces.repartition_classes[matiere]:
+                Les_interfaces.repartition_classes[matiere][prof] = []
+        self.mainForm.WFStackedWidget.setCurrentWidget(self.prevComponent)
          
 if __name__ == '__main__':
     app = QApplication(sys.argv)

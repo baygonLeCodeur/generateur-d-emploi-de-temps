@@ -28,13 +28,18 @@ class Nommage_profs(QWidget):
         
         self.inner12_layout = QHBoxLayout()
         self.inner12_layout.addStretch()
+        self.boutons = {}
         for matiere in self.matieres:
             bouton = QPushButton(matiere)
             bouton.setObjectName(matiere)
             bouton.setFixedSize(60, 30)
             if matiere == "EDHC":
                 bouton.setDisabled(True)
+            # Désactiver les boutons des matières avec 0 profs dans les données sauvegardées
+            elif matiere in Les_interfaces.repartition_classes and len(Les_interfaces.repartition_classes[matiere]) == 0:
+                bouton.setDisabled(True)
             bouton.clicked.connect(self.on_button_clicked)
+            self.boutons[matiere] = bouton
             self.inner12_layout.addWidget(bouton)
             self.inner12_layout.addStretch()
         self.inner12_layout.addStretch()
@@ -102,16 +107,29 @@ class Nommage_profs(QWidget):
         self.combo.clear()
         for prof in Les_interfaces.repartition_classes[self.matiere]:
             self.combo.addItem(prof)
-        nom_du_prof_1 = Les_interfaces.noms_professeurs[self.matiere][self.combo.itemText(0)]
-        self.name_field.setText(nom_du_prof_1)
-        self.bout_valid_noms.setDisabled(True)
+        # Pré-remplir le champ nom avec le premier prof si disponible
+        if self.combo.count() > 0:
+            nom_du_prof_1 = Les_interfaces.noms_professeurs[self.matiere][self.combo.itemText(0)]
+            self.name_field.setText(nom_du_prof_1)
+            # Si le nom est déjà rempli, activer le bouton de validation
+            if nom_du_prof_1 != "":
+                self.bout_valid_noms.setEnabled(True)
+            else:
+                self.bout_valid_noms.setDisabled(True)
+        else:
+            self.bout_valid_noms.setDisabled(True)
     
     @Slot(str)
     def on_combo_text_changed(self, text):
         if text != "": # ce gestionnaire est souvent appelé en double pour je ne sais quelle raison le cas echeant le 1er appel se fait avec text==""
             nom_du_prof = Les_interfaces.noms_professeurs[self.matiere][text]
+            print(nom_du_prof)
             self.name_field.setText(nom_du_prof)
-            self.bout_valid_noms.setDisabled(True)
+            # Si le nom est déjà rempli, activer le bouton de validation
+            if nom_du_prof != "":
+                self.bout_valid_noms.setEnabled(True)
+            else:
+                self.bout_valid_noms.setDisabled(True)
     
     def valid_noms(self):
         Les_interfaces.noms_professeurs[self.matiere][self.combo.currentText()] = self.name_field.text()
@@ -133,14 +151,20 @@ class Nommage_profs(QWidget):
                 if self.casser_boucle:
                     break
         if not self.casser_boucle:
+            # Sauvegarder les données après cette étape
+            Les_interfaces.save_data()
             self.mainForm.WFStackedWidget.setCurrentWidget(self.nextComponent)
     
     def precedent(self):
-         self.mainForm.WFStackedWidget.setCurrentWidget(self.prevComponent)
+        # Réinitialiser les noms de professeurs (sauf EDHC qui est géré séparément)
+        for matiere in Les_interfaces.noms_professeurs:
+            if matiere != "EDHC":
+                for prof in Les_interfaces.noms_professeurs[matiere]:
+                    Les_interfaces.noms_professeurs[matiere][prof] = ""
+        self.mainForm.WFStackedWidget.setCurrentWidget(self.prevComponent)
          
 """ if __name__ == '__main__':
     app = QApplication(sys.argv)
     workForm = Nommage_profs("VEUILLEZ, PAR MATIERE, NOMMER CHAQUE PROFESSEUR", None, None)
     workForm.setFixedHeight(300)
-    workForm.show()
-    sys.exit(app.exec()) """
+    workForm.show

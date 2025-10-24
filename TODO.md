@@ -1,0 +1,8 @@
+- [x] Modifier mes_dictionnaires.py : ajouter fonctions save_data() et load_data(), charger automatiquement au démarrage
+- [x] Modifier saisie_nombres_de_classes.py : ajouter sauvegarde après niveauClasse_salles() + pré-remplissage des champs
+- [x] Modifier saisie_jours_de_devoirs.py : ajouter sauvegarde après suivant() + pré-remplissage des combos
+- [x] Modifier saisie_nbres_de_profs.py : ajouter sauvegarde après suivant() + pré-remplissage des champs
+- [x] Modifier nommage_profs.py : ajouter sauvegarde après suivant() + pré-remplissage des champs et boutons
+- [x] Modifier nommer_profs_edhc.py : ajouter sauvegarde après suivant() + pré-remplissage des combos
+- [x] Modifier affect_class_a_prof.py : ajouter sauvegarde après suivant() (avant génération) + pré-remplissage des combos
+- [x] Tester le chargement/sauvegarde et redémarrage avec données persistées

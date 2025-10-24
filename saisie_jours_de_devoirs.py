@@ -32,12 +32,21 @@ class Saisie_jours_de_devoirs(QWidget):
             self.inner2_layout.addWidget(label, 0, ligne)
             combo = QComboBox()
             combo.currentIndexChanged.connect(self.on_index_changed)
-            combo.addItem("jour de devoir de niveau") 
-            combo.setCurrentIndex(-1) # Ceci assure que le placeholder est affiché 
+            combo.addItem("jour de devoir de niveau")
+            combo.setCurrentIndex(-1) # Ceci assure que le placeholder est affiché
             combo.addItems(["Lun", "Mar", "Mer", "Jeu", "Ven"])
             le_niveau = niveau.replace("è", "e").replace(" ", "")
             self.niveaux_par_jours[le_niveau] = combo
-            self.inner2_layout.addWidget(combo, 1, ligne) 
+            # Pré-remplir avec les données sauvegardées si disponibles
+            for jour, niveaux_list in Les_interfaces.devoirs_de_niveaux.items():
+                if le_niveau in niveaux_list:
+                    jours_abbr = {"Lundi": "Lun", "Mardi": "Mar", "Mercredi": "Mer", "Jeudi": "Jeu", "Vendredi": "Ven"}
+                    if jour in jours_abbr:
+                        index = combo.findText(jours_abbr[jour])
+                        if index != -1:
+                            combo.setCurrentIndex(index)
+                            break
+            self.inner2_layout.addWidget(combo, 1, ligne)
         
         self.inner3_layout = QHBoxLayout()
         self.inner3_layout.addStretch(2)
@@ -88,11 +97,15 @@ class Saisie_jours_de_devoirs(QWidget):
                 self.boutSuivant.setDisabled(True)
                 break
         if not self.insuffisance_de_salle and faisabilite_emploi_du_temps():
+            # Sauvegarder les données après cette étape
+            Les_interfaces.save_data()
             self.mainForm.WFStackedWidget.setCurrentWidget(self.nextComponent)
         elif not self.insuffisance_de_salle:
             self.boutSuivant.setDisabled(True)
             QMessageBox.critical(None, "Erreur", "Le nombre de salles disponibles ne couvre pas le volume horaire total hebdomadaire requis")
         
     def precedent(self):
-        Les_interfaces.salles = []
+        # Réinitialiser les données de devoirs de niveaux
+        Les_interfaces.devoirs_de_niveaux = {}
+        Les_interfaces.salles_devoir_de_niveau = {}
         self.mainForm.WFStackedWidget.setCurrentWidget(self.prevComponent)

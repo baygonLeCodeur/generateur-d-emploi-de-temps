@@ -122,6 +122,7 @@ class Nommer_profs_edhc(QWidget):
         self.matiere = bouton.objectName()
         self.combo_ajout.clear()
         self.combo_retrait.clear()
+        # Pré-remplir les combos avec les données sauvegardées
         for prof in Les_interfaces.noms_professeurs[self.matiere]:
             if prof not in Les_interfaces.repartition_classes["EDHC"]:
                 self.combo_ajout.addItem(Les_interfaces.noms_professeurs[self.matiere][prof])
@@ -156,10 +157,15 @@ class Nommer_profs_edhc(QWidget):
         if not Les_interfaces.repartition_classes["EDHC"]:
             QMessageBox.critical(None, "Erreur", "Vous n'avez désigné aucun professeur d'EDHC")
         else:
+            # Sauvegarder les données après cette étape
+            Les_interfaces.save_data()
             self.mainForm.WFStackedWidget.setCurrentWidget(self.nextComponent)
     
     def precedent(self):
-         self.mainForm.WFStackedWidget.setCurrentWidget(self.prevComponent)
+        # Réinitialiser les données EDHC
+        Les_interfaces.repartition_classes["EDHC"] = {}
+        Les_interfaces.noms_professeurs["EDHC"] = {}
+        self.mainForm.WFStackedWidget.setCurrentWidget(self.prevComponent)
          
 """ if __name__ == '__main__':
     app = QApplication(sys.argv)

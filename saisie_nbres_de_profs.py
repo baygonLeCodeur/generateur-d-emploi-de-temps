@@ -34,7 +34,12 @@ class Saisie_nbres_de_profs(QWidget):
             if matiere == "EDHC":
                 line_edit = IntegerLineEdit(width=50, height=30, cas=3)
             self.nbres_de_prof_par_matiere[matiere] = line_edit
-            self.inner2_layout.addWidget(line_edit, 1, ligne) 
+            # Pré-remplir avec les données sauvegardées si disponibles
+            if matiere in Les_interfaces.repartition_classes:
+                nb_profs = len(Les_interfaces.repartition_classes[matiere])
+                if nb_profs > 0:
+                    line_edit.setText(str(nb_profs))
+            self.inner2_layout.addWidget(line_edit, 1, ligne)
         
         self.inner3_layout = QHBoxLayout()
         self.inner3_layout.addStretch(2)
@@ -54,6 +59,9 @@ class Saisie_nbres_de_profs(QWidget):
         self.main_layout.addStretch()
     
     def suivant(self):
+        # Réinitialiser les structures de données avant de les remplir
+        Les_interfaces.repartition_classes = {}
+        Les_interfaces.noms_professeurs = {}
         for matiere in self.matieres:
             Les_interfaces.repartition_classes[matiere] = {}
             Les_interfaces.noms_professeurs[matiere] = {}
@@ -61,6 +69,14 @@ class Saisie_nbres_de_profs(QWidget):
                 for cpt in range(int(self.nbres_de_prof_par_matiere[matiere].text())):
                     Les_interfaces.repartition_classes[matiere][matiere + "_" + str(cpt + 1).zfill(2)] = []
                     Les_interfaces.noms_professeurs[matiere][matiere + "_" + str(cpt + 1).zfill(2)] = ""
+        # Désactiver les boutons des matières avec 0 profs dans l'écran suivant
+        for matiere in self.matieres:
+            if matiere != "EDHC" and len(Les_interfaces.repartition_classes[matiere]) == 0:
+                self.nextComponent.boutons[matiere].setDisabled(True)
+            else:
+                self.nextComponent.boutons[matiere].setEnabled(True)
+        # Sauvegarder les données après cette étape
+        Les_interfaces.save_data()
         self.nextComponent.name_field.setText("")
         self.mainForm.setFixedHeight(300)
         self.mainForm.WFStackedWidget.setCurrentWidget(self.nextComponent)

@@ -49,10 +49,14 @@ def genere_emploi_du_temps():
             les_permut_c = iter([copy.deepcopy(perm_n) for perm_n in les_permut_n])
             les_tab_de_seances_de_classe = next(les_permut_c)
             les_profs_de_la_classe = {}
-            for matiere in les_tab_de_seances_de_classe:
+            # Filtrer les matières qui ont des professeurs assignés
+            matieres_avec_profs = {mat: seances for mat, seances in les_tab_de_seances_de_classe.items() if len(Les_interfaces.repartition_classes.get(mat, {})) > 0}
+            for matiere in matieres_avec_profs:
                 for prof in Les_interfaces.repartition_classes[matiere]:
                     if classe in Les_interfaces.repartition_classes[matiere][prof]:
                         les_profs_de_la_classe[matiere] = prof
+            # Utiliser les matières filtrées pour la génération
+            les_tab_de_seances_de_classe = matieres_avec_profs
             reprendre_edt = True
             while reprendre_edt:
                 for jour in ['Lundi', 'Mardi', "Mercredi", 'Jeudi', 'Vendredi']:

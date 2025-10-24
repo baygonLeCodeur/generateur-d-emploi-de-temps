@@ -20,6 +20,9 @@ class Saisie_nombres_de_classes(QWidget):
         
         self.nbSalles_label = QLabel("NOMBRES DE SALLES")
         self.nbSalles = IntegerLineEdit(width=50, height=30, cas=2)
+        # Pré-remplir avec les données sauvegardées si disponibles
+        if Les_interfaces.salles:
+            self.nbSalles.setText(str(len(Les_interfaces.salles)))
         
         self.title_label = QLabel(title)
         self.title_label.setAlignment(Qt.AlignCenter)
@@ -33,6 +36,9 @@ class Saisie_nombres_de_classes(QWidget):
             line_edit = IntegerLineEdit(width=50, height=30)
             le_niveau = niveau.replace("è", "e").replace(" ", "")
             self.nbClasse_par_niveau[le_niveau] = line_edit
+            # Pré-remplir avec les données sauvegardées si disponibles
+            if le_niveau in Les_interfaces.niveaux_classes:
+                line_edit.setText(str(len(Les_interfaces.niveaux_classes[le_niveau])))
             self.inner2_layout.addWidget(line_edit, 1, ligne)
             
         self.inner311_layout =QHBoxLayout()
@@ -73,6 +79,9 @@ class Saisie_nombres_de_classes(QWidget):
         
     def niveauClasse_salles(self):
         niveaux = ["TleA1", "TleA2", "TleD", "TleC", "3eme", "6eme", "5eme", "4eme", "2ndeA", "2ndeC", "1ereA1", "1ereA2", "1ereC", "1ereD"]
+        # Réinitialiser les structures de données avant de les remplir
+        Les_interfaces.niveaux_classes = {}
+        Les_interfaces.salles = []
         for niveau in niveaux:
             les_classes_du_niveau = []
             if int(self.nbClasse_par_niveau[niveau].text()) != 0:
@@ -81,5 +90,7 @@ class Saisie_nombres_de_classes(QWidget):
                 Les_interfaces.niveaux_classes[niveau] = les_classes_du_niveau
         for cpt in range(int(self.nbSalles.text())):
             Les_interfaces.salles.append("S" + str(cpt + 1))
+        # Sauvegarder les données après cette étape
+        Les_interfaces.save_data()
         self.nextComponent.boutSuivant.setEnabled(True)
         self.mainForm.WFStackedWidget.setCurrentWidget(self.nextComponent)
