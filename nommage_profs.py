@@ -123,7 +123,6 @@ class Nommage_profs(QWidget):
     def on_combo_text_changed(self, text):
         if text != "": # ce gestionnaire est souvent appelé en double pour je ne sais quelle raison le cas echeant le 1er appel se fait avec text==""
             nom_du_prof = Les_interfaces.noms_professeurs[self.matiere][text]
-            print(nom_du_prof)
             self.name_field.setText(nom_du_prof)
             # Si le nom est déjà rempli, activer le bouton de validation
             if nom_du_prof != "":
@@ -167,4 +166,5 @@ class Nommage_profs(QWidget):
     app = QApplication(sys.argv)
     workForm = Nommage_profs("VEUILLEZ, PAR MATIERE, NOMMER CHAQUE PROFESSEUR", None, None)
     workForm.setFixedHeight(300)
-    workForm.show
+    workForm.show()
+    sys.exit(app.exec()) """
