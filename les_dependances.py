@@ -31,7 +31,7 @@ def prog_deux_heures(matiere, tab_de_seances, edt_classe,  edt_prof, jour, heure
     else:
         return False
     
-    if moment_arg in edt_salles[s_d][jour] and edt_salles[s_d][jour][moment_arg][heure1] is None and edt_salles[s_d][jour][moment_arg][heure2] is None:
+    if s_d is not None and moment_arg in edt_salles[s_d][jour] and edt_salles[s_d][jour][moment_arg][heure1] is None and edt_salles[s_d][jour][moment_arg][heure2] is None:
         Les_interfaces.s_v = s_d
     else:
         for salle in Les_interfaces.salles:
@@ -69,7 +69,7 @@ def prog_une_heure(matiere, tab_de_seances, edt_classe,  edt_prof, jour, heure, 
     else:
         return False
     
-    if moment_arg in edt_salles[s_d][jour] and edt_salles[s_d][jour][moment_arg][heure] is None:
+    if s_d is not None and moment_arg in edt_salles[s_d][jour] and edt_salles[s_d][jour][moment_arg][heure] is None:
         Les_interfaces.s_v = s_d
     else:
         for salle in Les_interfaces.salles:
@@ -114,7 +114,7 @@ for niveau in Les_interfaces.niveaux_classes:
                     salle_dediees_or[Les_interfaces.salles[cpt2 // 2 + cpt1]].append(classe)
                 cpt2 = cpt2 + 1
                 cpt3 = cpt2 // 2 + cpt1 if cpt2 % 2 == 0 else cpt2 // 2 + cpt1 + 1
-            elif niveau in ["TleA2", "TleD"]:
+            elif niveau in ["TleA2", "TleD", "TleC", "TleA1"]:
                 emplois_du_temps_classes_or[classe] = {
                     'Lundi': {"Matin": [None] * 5, "Soir": [None] * 5},
                     'Mardi': {"Matin": [None] * 5, "Soir": [None] * 5},

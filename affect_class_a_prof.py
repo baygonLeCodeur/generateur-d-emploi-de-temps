@@ -153,22 +153,18 @@ class Affect_class_a_prof(QWidget):
                 for niveau in Les_interfaces.matieres_seances:
                     if self.matiere in Les_interfaces.matieres_seances[niveau]:
                         self.classes_par_matiere[self.matiere] += Les_interfaces.niveaux_classes[niveau]
+                # Remove already assigned classes
+                assigned = set()
+                for prof in Les_interfaces.repartition_classes.get(self.matiere, {}):
+                    assigned.update(Les_interfaces.repartition_classes[self.matiere][prof])
+                self.classes_par_matiere[self.matiere] = [c for c in self.classes_par_matiere[self.matiere] if c not in assigned]
             self.combo_ajout.clear()
             self.combo_ajout.addItems(self.classes_par_matiere[self.matiere])
             self.combo_retrait.clear()
             for prof in Les_interfaces.noms_professeurs[self.matiere]:
                 if Les_interfaces.noms_professeurs[self.matiere][prof] == text:
-                    les_classes_du_prof = Les_interfaces.repartition_classes[self.matiere][prof]
+                    les_classes_du_prof = Les_interfaces.repartition_classes[self.matiere].get(prof, [])
                     self.combo_retrait.addItems(les_classes_du_prof)
-                    break
-            # Pré-remplir les combos avec les données sauvegardées
-            for prof in Les_interfaces.noms_professeurs[self.matiere]:
-                if Les_interfaces.noms_professeurs[self.matiere][prof] == text:
-                    classes_affectees = Les_interfaces.repartition_classes[self.matiere][prof]
-                    for classe in classes_affectees:
-                        if classe in self.classes_par_matiere[self.matiere]:
-                            self.classes_par_matiere[self.matiere].remove(classe)
-                            self.combo_retrait.addItem(classe)
                     break
             self.update_vh_label()
     
@@ -180,6 +176,8 @@ class Affect_class_a_prof(QWidget):
         self.combo_ajout.hidePopup()
         for prof in Les_interfaces.noms_professeurs[self.matiere]:
             if Les_interfaces.noms_professeurs[self.matiere][prof] == self.combo.currentText():
+                if prof not in Les_interfaces.repartition_classes[self.matiere]:
+                    Les_interfaces.repartition_classes[self.matiere][prof] = []
                 Les_interfaces.repartition_classes[self.matiere][prof].append(texte)
                 self.combo_retrait.addItem(texte)
                 break
@@ -190,7 +188,8 @@ class Affect_class_a_prof(QWidget):
         texte = self.combo_retrait.itemText(index)
         for prof in Les_interfaces.noms_professeurs[self.matiere]:
             if Les_interfaces.noms_professeurs[self.matiere][prof] == self.combo.currentText():
-                Les_interfaces.repartition_classes[self.matiere][prof].remove(texte)
+                if prof in Les_interfaces.repartition_classes[self.matiere]:
+                    Les_interfaces.repartition_classes[self.matiere][prof].remove(texte)
                 self.combo_retrait.removeItem(index)
                 self.combo_retrait.hidePopup()
                 break
@@ -204,22 +203,25 @@ class Affect_class_a_prof(QWidget):
         for prof in Les_interfaces.noms_professeurs[self.matiere]:
             if Les_interfaces.noms_professeurs[self.matiere][prof] == self.combo.currentText():
                 id_prof = prof
-                for classe in Les_interfaces.repartition_classes[self.matiere][prof]:
+                classes_prof = Les_interfaces.repartition_classes[self.matiere].get(prof, [])
+                for classe in classes_prof:
                     for niveau in Les_interfaces.niveaux_classes:
                         if classe in Les_interfaces.niveaux_classes[niveau]:
                             vh += sum(Les_interfaces.matieres_seances[niveau][self.matiere])
                 break
         if self.matiere != "EDHC":
-            if id_prof in Les_interfaces.repartition_classes["EDHC"]:
-                for classe in Les_interfaces.repartition_classes["EDHC"][id_prof]:
+            edhc_repartition = Les_interfaces.repartition_classes.get("EDHC", {})
+            if id_prof in edhc_repartition:
+                for classe in edhc_repartition[id_prof]:
                     for niveau in Les_interfaces.niveaux_classes:
                         if classe in Les_interfaces.niveaux_classes[niveau]:
                             vh += sum(Les_interfaces.matieres_seances[niveau]["EDHC"])
         else:
             for matiere in Les_interfaces.repartition_classes:
                 if matiere != "EDHC":
-                    if id_prof in Les_interfaces.repartition_classes[matiere]:
-                        for classe in Les_interfaces.repartition_classes[matiere][id_prof]:
+                    matiere_repartition = Les_interfaces.repartition_classes.get(matiere, {})
+                    if id_prof in matiere_repartition:
+                        for classe in matiere_repartition[id_prof]:
                             for niveau in Les_interfaces.niveaux_classes:
                                 if classe in Les_interfaces.niveaux_classes[niveau]:
                                     vh += sum(Les_interfaces.matieres_seances[niveau][matiere])
@@ -241,13 +243,14 @@ class Affect_class_a_prof(QWidget):
     def precedent(self):
         # Réinitialiser les affectations de classes aux professeurs
         for matiere in Les_interfaces.repartition_classes:
-            for prof in Les_interfaces.repartition_classes[matiere]:
-                Les_interfaces.repartition_classes[matiere][prof] = []
+            matiere_dict = Les_interfaces.repartition_classes[matiere]
+            for prof in matiere_dict:
+                matiere_dict[prof] = []
         self.mainForm.WFStackedWidget.setCurrentWidget(self.prevComponent)
          
-if __name__ == '__main__':
+""" if __name__ == '__main__':
     app = QApplication(sys.argv)
     workForm = Affect_class_a_prof("VEUILLEZ, PAR MATIERE, NOMMER CHAQUE PROFESSEUR", None, None)
     workForm.setFixedHeight(300)
     workForm.show()
-    sys.exit(app.exec())
+    sys.exit(app.exec()) """

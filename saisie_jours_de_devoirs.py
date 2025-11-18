@@ -84,7 +84,7 @@ class Saisie_jours_de_devoirs(QWidget):
             for niveau in Les_interfaces.devoirs_de_niveaux[jour]:
                 if niveau in Les_interfaces.niveaux_classes:
                     nbSalle += len(Les_interfaces.niveaux_classes[niveau])
-            print(nbSalle, len(Les_interfaces.salles))
+            #print(jour, nbSalle, len(Les_interfaces.salles))
             if nbSalle <= len(Les_interfaces.salles):
                 for cpt in range(1, nbSalle + 1):
                     if jour not in Les_interfaces.salles_devoir_de_niveau:
@@ -92,10 +92,11 @@ class Saisie_jours_de_devoirs(QWidget):
                     else:
                         Les_interfaces.salles_devoir_de_niveau[jour].append("S" + str(cpt))
             else:
-                self.insuffisance_de_salle = True
-                QMessageBox.critical(None, "Erreur", "Le nombre de salles requis pour les devoirs de niveaux du " + jour + " soir est supérieur au nombre de salle disponible!")
-                self.boutSuivant.setDisabled(True)
-                break
+                if jour != "Mercredi":
+                    self.insuffisance_de_salle = True
+                    QMessageBox.critical(None, "Erreur", "Le nombre de salles requis pour les devoirs de niveaux du " + jour + " soir est supérieur au nombre de salle disponible!")
+                    self.boutSuivant.setDisabled(True)
+                    break
         if not self.insuffisance_de_salle and faisabilite_emploi_du_temps():
             # Sauvegarder les données après cette étape
             Les_interfaces.save_data()

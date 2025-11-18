@@ -59,6 +59,10 @@ class Saisie_nbres_de_profs(QWidget):
         self.main_layout.addStretch()
     
     def suivant(self):
+        # Sauvegarder les noms existants avant de reconstruire les structures
+        noms_existants = Les_interfaces.noms_professeurs.copy() if hasattr(Les_interfaces, 'noms_professeurs') and Les_interfaces.noms_professeurs else {}
+        repartition_existante = Les_interfaces.repartition_classes.copy() if hasattr(Les_interfaces, 'repartition_classes') and Les_interfaces.repartition_classes else {}
+
         # Réinitialiser les structures de données avant de les remplir
         Les_interfaces.repartition_classes = {}
         Les_interfaces.noms_professeurs = {}
@@ -67,11 +71,18 @@ class Saisie_nbres_de_profs(QWidget):
             Les_interfaces.noms_professeurs[matiere] = {}
             if matiere != "EDHC":
                 for cpt in range(int(self.nbres_de_prof_par_matiere[matiere].text())):
-                    Les_interfaces.repartition_classes[matiere][matiere + "_" + str(cpt + 1).zfill(2)] = []
-                    Les_interfaces.noms_professeurs[matiere][matiere + "_" + str(cpt + 1).zfill(2)] = ""
+                    prof_key = matiere + "_" + str(cpt + 1).zfill(2)
+                    Les_interfaces.repartition_classes[matiere][prof_key] = repartition_existante.get(matiere, {}).get(prof_key, [])
+                    # Restaurer le nom s'il existe dans les données sauvegardées
+                    Les_interfaces.noms_professeurs[matiere][prof_key] = noms_existants.get(matiere, {}).get(prof_key, "")
+        # Restaurer EDHC si présent
+        if "EDHC" in repartition_existante:
+            Les_interfaces.repartition_classes["EDHC"] = repartition_existante["EDHC"]
+        if "EDHC" in noms_existants:
+            Les_interfaces.noms_professeurs["EDHC"] = noms_existants["EDHC"]
         # Désactiver les boutons des matières avec 0 profs dans l'écran suivant
         for matiere in self.matieres:
-            if matiere != "EDHC" and len(Les_interfaces.repartition_classes[matiere]) == 0:
+            if matiere == "EDHC" or matiere != "EDHC" and len(Les_interfaces.repartition_classes[matiere]) == 0:
                 self.nextComponent.boutons[matiere].setDisabled(True)
             else:
                 self.nextComponent.boutons[matiere].setEnabled(True)

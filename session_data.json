@@ -84,138 +84,531 @@
         "S20",
         "S21"
     ],
-    "devoirs_de_niveaux": {},
+    "devoirs_de_niveaux": {
+        "Mercredi": [
+            "TleA1",
+            "TleA2",
+            "TleD",
+            "3eme",
+            "6eme",
+            "5eme",
+            "4eme",
+            "2ndeA",
+            "2ndeC",
+            "1ereA1",
+            "1ereA2",
+            "1ereD",
+            "TleA1",
+            "TleA2",
+            "TleD",
+            "3eme",
+            "6eme",
+            "5eme",
+            "4eme",
+            "2ndeA",
+            "2ndeC",
+            "1ereA1",
+            "1ereA2",
+            "1ereD"
+        ],
+        "Vendredi": [
+            "1ereC",
+            "1ereC"
+        ]
+    },
     "salles_devoir_de_niveau": {},
     "repartition_classes": {
         "MATHS": {
-            "MATHS_01": [],
-            "MATHS_02": [],
-            "MATHS_03": [],
-            "MATHS_04": [],
-            "MATHS_05": [],
-            "MATHS_06": [],
-            "MATHS_07": []
+            "MATHS_01": [
+                "TleA1 1",
+                "2ndeA 1",
+                "2ndeA 2",
+                "5eme 4",
+                "3eme 2",
+                "3eme 3"
+            ],
+            "MATHS_02": [
+                "TleD 1",
+                "TleD 2",
+                "TleD 3",
+                "6eme 3"
+            ],
+            "MATHS_03": [
+                "TleA2 1",
+                "1ereD 3",
+                "4eme 4",
+                "3eme 7",
+                "5eme 1"
+            ],
+            "MATHS_04": [
+                "3eme 6",
+                "3eme 5",
+                "6eme 1",
+                "6eme 2",
+                "5eme 2"
+            ],
+            "MATHS_05": [
+                "3eme 1",
+                "3eme 4",
+                "6eme 4",
+                "5eme 3",
+                "1ereD 1"
+            ],
+            "MATHS_06": [
+                "5eme 5",
+                "4eme 1",
+                "4eme 2",
+                "4eme 3",
+                "2ndeC 2",
+                "1ereA2 1"
+            ],
+            "MATHS_07": [
+                "2ndeA 3",
+                "2ndeC 3",
+                "2ndeC 1",
+                "1ereD 2",
+                "1ereA1 1"
+            ]
         },
         "PHYS": {
-            "PHYS_01": [],
-            "PHYS_02": [],
-            "PHYS_03": [],
-            "PHYS_04": [],
-            "PHYS_05": []
+            "PHYS_01": [
+                "TleD 1",
+                "1ereD 3",
+                "3eme 4",
+                "3eme 6",
+                "4eme 1",
+                "4eme 2"
+            ],
+            "PHYS_02": [
+                "TleD 2",
+                "2ndeC 1",
+                "2ndeA 2",
+                "2ndeA 3",
+                "1ereD 2"
+            ],
+            "PHYS_03": [
+                "3eme 1",
+                "3eme 2",
+                "4eme 3",
+                "4eme 4",
+                "5eme 1",
+                "5eme 2",
+                "1ereA1 1",
+                "1ereA2 1",
+                "5eme 5"
+            ],
+            "PHYS_04": [
+                "TleD 3",
+                "3eme 3",
+                "3eme 5",
+                "3eme 7",
+                "6eme 1",
+                "6eme 2",
+                "6eme 3",
+                "5eme 3"
+            ],
+            "PHYS_05": [
+                "5eme 4",
+                "2ndeC 2",
+                "2ndeC 3",
+                "1ereD 1",
+                "2ndeA 1",
+                "6eme 4"
+            ]
         },
         "FRAN": {
-            "FRAN_01": [],
-            "FRAN_02": [],
-            "FRAN_03": [],
-            "FRAN_04": [],
-            "FRAN_05": [],
-            "FRAN_06": [],
-            "FRAN_07": []
+            "FRAN_01": [
+                "TleA1 1",
+                "TleA2 1",
+                "3eme 2",
+                "3eme 7",
+                "4eme 4"
+            ],
+            "FRAN_02": [
+                "TleD 1",
+                "3eme 1",
+                "3eme 6",
+                "5eme 1",
+                "6eme 3"
+            ],
+            "FRAN_03": [
+                "TleD 2",
+                "6eme 4",
+                "6eme 2",
+                "6eme 1",
+                "5eme 5"
+            ],
+            "FRAN_04": [
+                "TleD 3",
+                "1ereA2 1",
+                "1ereA1 1",
+                "1ereD 2",
+                "1ereD 1",
+                "2ndeA 1",
+                "4eme 2"
+            ],
+            "FRAN_05": [
+                "3eme 4",
+                "3eme 3",
+                "3eme 5",
+                "5eme 2"
+            ],
+            "FRAN_06": [
+                "5eme 3",
+                "4eme 3",
+                "2ndeA 3",
+                "2ndeC 2",
+                "1ereD 3"
+            ],
+            "FRAN_07": [
+                "5eme 4",
+                "4eme 1",
+                "2ndeA 2",
+                "2ndeC 3",
+                "2ndeC 1"
+            ]
         },
         "ANGL": {
-            "ANGL_01": [],
-            "ANGL_02": [],
-            "ANGL_03": [],
-            "ANGL_04": [],
-            "ANGL_05": [],
-            "ANGL_06": []
+            "ANGL_01": [
+                "1ereD 3",
+                "1ereD 1",
+                "4eme 2",
+                "5eme 2",
+                "6eme 3",
+                "3eme 6"
+            ],
+            "ANGL_02": [
+                "TleA1 1",
+                "TleA2 1",
+                "TleD 1",
+                "3eme 1",
+                "3eme 3",
+                "3eme 5"
+            ],
+            "ANGL_03": [
+                "TleD 2",
+                "TleD 3",
+                "3eme 2",
+                "6eme 4",
+                "3eme 7",
+                "5eme 4",
+                "4eme 3"
+            ],
+            "ANGL_04": [
+                "5eme 3",
+                "4eme 4",
+                "5eme 5",
+                "2ndeA 1",
+                "2ndeA 2",
+                "2ndeA 3"
+            ],
+            "ANGL_05": [
+                "2ndeC 1",
+                "2ndeC 2",
+                "2ndeC 3",
+                "1ereA1 1",
+                "1ereA2 1",
+                "1ereD 2"
+            ],
+            "ANGL_06": [
+                "6eme 1",
+                "3eme 4",
+                "4eme 1",
+                "5eme 1",
+                "6eme 2"
+            ]
         },
         "SVT": {
-            "SVT_01": [],
-            "SVT_02": [],
-            "SVT_03": [],
-            "SVT_04": []
+            "SVT_01": [
+                "TleD 1",
+                "TleD 2",
+                "3eme 1",
+                "3eme 2",
+                "3eme 4",
+                "2ndeC 1",
+                "5eme 2"
+            ],
+            "SVT_02": [
+                "TleA1 1",
+                "TleA2 1",
+                "TleD 3",
+                "3eme 5",
+                "6eme 3",
+                "6eme 4",
+                "6eme 1",
+                "6eme 2",
+                "1ereD 3"
+            ],
+            "SVT_03": [
+                "3eme 3",
+                "3eme 6",
+                "3eme 7",
+                "5eme 1",
+                "5eme 3",
+                "5eme 4",
+                "5eme 5",
+                "4eme 1",
+                "4eme 3",
+                "4eme 4"
+            ],
+            "SVT_04": [
+                "4eme 2",
+                "2ndeA 1",
+                "2ndeA 2",
+                "2ndeA 3",
+                "2ndeC 2",
+                "2ndeC 3",
+                "1ereA1 1",
+                "1ereA2 1",
+                "1ereD 1",
+                "1ereD 2"
+            ]
         },
         "HGEO": {
-            "HGEO_01": [],
-            "HGEO_02": [],
-            "HGEO_03": [],
-            "HGEO_04": [],
-            "HGEO_05": [],
-            "HGEO_06": []
+            "HGEO_01": [
+                "3eme 6",
+                "5eme 2",
+                "5eme 3",
+                "5eme 4",
+                "5eme 5",
+                "4eme 1",
+                "4eme 2",
+                "4eme 3"
+            ],
+            "HGEO_02": [
+                "3eme 1",
+                "3eme 5",
+                "3eme 7",
+                "6eme 1",
+                "6eme 2",
+                "6eme 3",
+                "6eme 4",
+                "5eme 1"
+            ],
+            "HGEO_03": [
+                "TleA1 1",
+                "TleA2 1",
+                "TleD 1",
+                "TleD 2",
+                "TleD 3"
+            ],
+            "HGEO_04": [
+                "3eme 3",
+                "3eme 4",
+                "2ndeA 1",
+                "2ndeA 2",
+                "2ndeA 3",
+                "2ndeC 1"
+            ],
+            "HGEO_05": [
+                "2ndeC 2",
+                "2ndeC 3",
+                "1ereA1 1",
+                "1ereA2 1",
+                "1ereD 1"
+            ],
+            "HGEO_06": [
+                "1ereD 2",
+                "1ereD 3",
+                "4eme 4",
+                "3eme 2"
+            ]
         },
         "LV2": {
-            "LV2_01": [],
-            "LV2_02": [],
-            "LV2_03": []
+            "LV2_01": [
+                "TleA1 1",
+                "TleA2 1",
+                "3eme 1",
+                "3eme 2",
+                "3eme 3",
+                "3eme 4",
+                "1ereA2 1"
+            ],
+            "LV2_02": [
+                "3eme 6",
+                "3eme 7",
+                "4eme 1",
+                "4eme 2",
+                "4eme 3",
+                "4eme 4",
+                "3eme 5"
+            ],
+            "LV2_03": [
+                "2ndeA 1",
+                "2ndeA 2",
+                "2ndeA 3",
+                "2ndeC 1",
+                "2ndeC 2",
+                "2ndeC 3",
+                "1ereA1 1"
+            ]
         },
         "PHIL": {
-            "PHIL_01": [],
-            "PHIL_02": []
+            "PHIL_01": [
+                "TleA1 1",
+                "TleA2 1",
+                "TleD 1",
+                "TleD 2"
+            ],
+            "PHIL_02": [
+                "TleD 3",
+                "1ereA1 1",
+                "1ereA2 1",
+                "1ereD 1",
+                "1ereD 2",
+                "1ereD 3"
+            ]
         },
         "ART": {},
         "EPS": {
-            "EPS_01": [],
-            "EPS_02": [],
-            "EPS_03": [],
-            "EPS_04": []
+            "EPS_01": [
+                "TleA1 1",
+                "5eme 2",
+                "5eme 3",
+                "5eme 4",
+                "5eme 5",
+                "4eme 1",
+                "4eme 2",
+                "4eme 3",
+                "4eme 4"
+            ],
+            "EPS_02": [
+                "TleA2 1",
+                "3eme 6",
+                "3eme 7",
+                "6eme 1",
+                "6eme 2",
+                "6eme 3",
+                "6eme 4",
+                "5eme 1",
+                "2ndeA 1"
+            ],
+            "EPS_03": [
+                "TleD 1",
+                "3eme 1",
+                "3eme 2",
+                "3eme 3",
+                "2ndeA 3",
+                "2ndeC 1",
+                "2ndeC 2",
+                "2ndeC 3",
+                "1ereA2 1"
+            ],
+            "EPS_04": [
+                "TleD 2",
+                "TleD 3",
+                "3eme 4",
+                "3eme 5",
+                "1ereA1 1",
+                "1ereD 1",
+                "1ereD 2",
+                "1ereD 3",
+                "2ndeA 2"
+            ]
         },
-        "EDHC": {}
+        "EDHC": {
+            "HGEO_04": [
+                "3eme 1",
+                "3eme 2",
+                "5eme 4",
+                "5eme 5"
+            ],
+            "HGEO_05": [
+                "3eme 3",
+                "3eme 4",
+                "4eme 1",
+                "4eme 4"
+            ],
+            "LV2_02": [
+                "3eme 5",
+                "3eme 6"
+            ],
+            "PHIL_02": [
+                "3eme 7",
+                "6eme 1",
+                "6eme 2",
+                "6eme 3",
+                "6eme 4",
+                "5eme 1",
+                "5eme 2",
+                "4eme 2",
+                "4eme 3"
+            ],
+            "SVT_04": [
+                "5eme 3"
+            ]
+        }
     },
     "noms_professeurs": {
         "MATHS": {
-            "MATHS_01": "",
-            "MATHS_02": "",
-            "MATHS_03": "",
-            "MATHS_04": "",
-            "MATHS_05": "",
-            "MATHS_06": "",
-            "MATHS_07": ""
+            "MATHS_01": "Souley De Paris",
+            "MATHS_02": "Général Osée",
+            "MATHS_03": "Oxymore De Woody",
+            "MATHS_04": "Saki Gbi",
+            "MATHS_05": "Don Doffou",
+            "MATHS_06": "Agbassi Albéric",
+            "MATHS_07": "Ali Diarassouba"
         },
         "PHYS": {
-            "PHYS_01": "",
-            "PHYS_02": "",
-            "PHYS_03": "",
-            "PHYS_04": "",
-            "PHYS_05": ""
+            "PHYS_01": "Eveline Débah",
+            "PHYS_02": "Delphine Gbla",
+            "PHYS_03": "Mari Paule Aboh",
+            "PHYS_04": "Djaban Adjoua",
+            "PHYS_05": "Fatia Paule"
         },
         "FRAN": {
-            "FRAN_01": "",
-            "FRAN_02": "",
-            "FRAN_03": "",
-            "FRAN_04": "",
-            "FRAN_05": "",
-            "FRAN_06": "",
-            "FRAN_07": ""
+            "FRAN_01": "Amankou Eunice",
+            "FRAN_02": "Adjoua Djaban",
+            "FRAN_03": "Koné Salimata",
+            "FRAN_04": "Diakité Mohamed",
+            "FRAN_05": "Bakayoko Abdoulaye",
+            "FRAN_06": "Sylla Yacouba",
+            "FRAN_07": "Koutouan Marvin"
         },
         "ANGL": {
-            "ANGL_01": "",
-            "ANGL_02": "",
-            "ANGL_03": "",
-            "ANGL_04": "",
-            "ANGL_05": "",
-            "ANGL_06": ""
+            "ANGL_01": "Savané Fatoumata",
+            "ANGL_02": "Koutouan Marvin",
+            "ANGL_03": "Carla Diatta",
+            "ANGL_04": "Kouadio Auriane",
+            "ANGL_05": "Koné Bintou",
+            "ANGL_06": "Anoma Jemima"
         },
         "SVT": {
-            "SVT_01": "",
-            "SVT_02": "",
-            "SVT_03": "",
-            "SVT_04": ""
+            "SVT_01": "Essé Christian",
+            "SVT_02": "Agnéro Raoul",
+            "SVT_03": "Yéo Sounta",
+            "SVT_04": "Taïba Chantal"
         },
         "HGEO": {
-            "HGEO_01": "",
-            "HGEO_02": "",
-            "HGEO_03": "",
-            "HGEO_04": "",
-            "HGEO_05": "",
-            "HGEO_06": ""
+            "HGEO_01": "Féh Lambert",
+            "HGEO_02": "Avit Georges",
+            "HGEO_03": "Houan Dégbo Ferdinand",
+            "HGEO_04": "Kossonou Firmin",
+            "HGEO_05": "Awa Ehoura",
+            "HGEO_06": "Degny Maixan"
         },
         "LV2": {
-            "LV2_01": "",
-            "LV2_02": "",
-            "LV2_03": ""
+            "LV2_01": "Levy Niamkey",
+            "LV2_02": "Joseph Diomandé",
+            "LV2_03": "Zoumana Nouaman"
         },
         "PHIL": {
-            "PHIL_01": "",
-            "PHIL_02": ""
+            "PHIL_01": "Tuo Fozié",
+            "PHIL_02": "Soro Adama"
         },
         "ART": {},
         "EPS": {
-            "EPS_01": "",
-            "EPS_02": "",
-            "EPS_03": "",
-            "EPS_04": ""
+            "EPS_01": "Adama Traoré",
+            "EPS_02": "Serge Kouassi",
+            "EPS_03": "Konaté Bechir",
+            "EPS_04": "Dembélé Cheick"
         },
-        "EDHC": {}
+        "EDHC": {
+            "HGEO_04": "Kossonou Firmin",
+            "HGEO_05": "Awa Ehoura",
+            "LV2_02": "Joseph Diomandé",
+            "PHIL_02": "Soro Adama",
+            "SVT_04": "Taïba Chantal"
+        }
     }
 }

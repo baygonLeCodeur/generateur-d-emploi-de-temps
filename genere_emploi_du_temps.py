@@ -41,7 +41,9 @@ def genere_emploi_du_temps():
     arreter_tout = False
     for niveau in Les_interfaces.niveaux_classes:
         del Les_interfaces.matieres_seances[niveau]['EPS']
-        items = list(Les_interfaces.matieres_seances[niveau].items())
+        # Filter subjects that have at least one professor assigned
+        filtered_matieres = {matiere: seances for matiere, seances in Les_interfaces.matieres_seances[niveau].items() if matiere in Les_interfaces.repartition_classes and any(Les_interfaces.repartition_classes[matiere].values())}
+        items = list(filtered_matieres.items())
         perms = permutations(items)
         les_permut_n = [dict(perm) for perm in perms]
         for classe in Les_interfaces.niveaux_classes[niveau]:
@@ -101,12 +103,12 @@ def genere_emploi_du_temps():
                                 break
                             les_heures_vides = [i for i in range(len(emplois_du_temps_classes[classe][jour][moment])) if emplois_du_temps_classes[classe][jour][moment][i] is None]
                     if jour == "Vendredi":
-                        for nom_matiere in Les_interfaces.matieres_seances[niveau]:
-                            if len(les_tab_de_seances_de_classe[nom_matiere]) != 0:                           
+                        for nom_matiere in les_tab_de_seances_de_classe:
+                            if len(les_tab_de_seances_de_classe[nom_matiere]) != 0:
                                 break
                         else:
                             reprendre_edt = False
-                            break 
+                            break
                         try:
                             emplois_du_temps_classes[classe] = copy.deepcopy(emplois_du_temps_classes_or[classe])
                             for la_matiere in Les_interfaces.repartition_classes:

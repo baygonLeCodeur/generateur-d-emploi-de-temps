@@ -161,10 +161,3 @@ class Nommage_profs(QWidget):
                 for prof in Les_interfaces.noms_professeurs[matiere]:
                     Les_interfaces.noms_professeurs[matiere][prof] = ""
         self.mainForm.WFStackedWidget.setCurrentWidget(self.prevComponent)
-         
-""" if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    workForm = Nommage_profs("VEUILLEZ, PAR MATIERE, NOMMER CHAQUE PROFESSEUR", None, None)
-    workForm.setFixedHeight(300)
-    workForm.show()
-    sys.exit(app.exec()) """
