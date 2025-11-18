@@ -31,7 +31,9 @@ def validate_interfaces():
         raise ValidationError("Les structures repartition_classes et noms_professeurs doivent être des dictionnaires")
     for mat in li.repartition_classes:
         if mat not in li.noms_professeurs:
-            raise ValidationError(f"La matière {mat} est absente de noms_professeurs")
+            # Accepter les matières sans professeurs (ART par exemple)
+            if li.repartition_classes[mat]:  # Seulement si des profs sont assignés
+                raise ValidationError(f"La matière {mat} est absente de noms_professeurs")
         # Permettre que repartition_classes[matiere] soit vide, signifiant que la matière n'est pas enseignée
     # vérifier devoirs_de_niveaux si présent
     if hasattr(li, 'devoirs_de_niveaux') and li.devoirs_de_niveaux:

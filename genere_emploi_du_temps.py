@@ -1,55 +1,221 @@
 import copy
 from itertools import permutations
-from pdfLibrary import LesEmploisDeTpsClasses
+from pdfLibrary import LesEmploisDeTpsClasses, LesEmploisDeTpsProfs
 from les_dependances import prog_deux_heures, prog_une_heure, la_salle_dediee, emplois_du_temps_classes_or, emplois_du_temps_profs_or, emplois_du_temps_salles_or
 from mes_dictionnaires import Les_interfaces
-# tenter d'utiliser le nouveau solveur CSP heuristique si disponible
+# tenter d'utiliser le nouveau solveur CSP hybride
 try:
-    from app.solver.csp_solver import solve_emplois
+    from app.solver.csp_solver_hybrid import solve_emplois
 except Exception:
     solve_emplois = None
 from app.model.validation import validate_for_generation, ValidationError
+
+
+def ajouter_eps_aux_emplois(emplois_du_temps_classes, emplois_du_temps_profs):
+    """Ajouter les cours d'EPS aux emplois du temps"""
+    print("📚 Ajout des cours d'EPS...")
+    
+    # Mapping classe -> prof d'EPS
+    le_prof_d_eps_de = {}
+    for classe in emplois_du_temps_classes:
+        for prof in Les_interfaces.repartition_classes.get("EPS", {}):
+            if classe in Les_interfaces.repartition_classes["EPS"][prof]:
+                le_prof_d_eps_de[classe] = prof
+                break
+    
+    # Mapping classe -> niveau
+    niveau_classe = {}
+    for classe in emplois_du_temps_classes:
+        for niveau in Les_interfaces.niveaux_classes:
+            if classe in Les_interfaces.niveaux_classes[niveau]:
+                niveau_classe[classe] = niveau
+                break
+    
+    # Pour chaque classe, essayer de placer 2 heures d'EPS consécutives
+    for classe in emplois_du_temps_classes:
+        if classe not in le_prof_d_eps_de:
+            continue
+        
+        le_prof = le_prof_d_eps_de[classe]
+        niveau = niveau_classe.get(classe)
+        eps_placee = False
+        
+        for jour in ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"]:
+            if eps_placee:
+                break
+            
+            # Calculer le nombre d'heures déjà occupées ce jour
+            nb_heures_deja_fait = 0
+            for moment in emplois_du_temps_classes[classe].get(jour, {}):
+                nb_heures_deja_fait += sum(1 for cours in emplois_du_temps_classes[classe][jour][moment] if cours is not None)
+            
+            # Limite selon le niveau
+            max_heures = 5 if niveau in ["6eme", "5eme", "4eme", "3eme"] else 7
+            
+            if max_heures - nb_heures_deja_fait >= 2:
+                # Essayer le matin d'abord
+                if "Matin" in emplois_du_temps_classes[classe][jour]:
+                    for i in range(3):  # Positions 0-2 pour avoir de la place pour 2h consécutives
+                        if all(emplois_du_temps_classes[classe][jour]["Matin"][j] is None for j in range(i, min(i+2, 5))):
+                            # Vérifier disponibilité du prof
+                            if (le_prof in emplois_du_temps_profs and 
+                                "Matin" in emplois_du_temps_profs[le_prof][jour] and
+                                emplois_du_temps_profs[le_prof][jour]["Matin"][i] is None and 
+                                emplois_du_temps_profs[le_prof][jour]["Matin"][i+1] is None):
+                                
+                                emplois_du_temps_classes[classe][jour]["Matin"][i] = {
+                                    "prof": le_prof, "matiere": "EPS", "salle": "Terrain"
+                                }
+                                emplois_du_temps_classes[classe][jour]["Matin"][i+1] = {
+                                    "prof": le_prof, "matiere": "EPS", "salle": "Terrain"
+                                }
+                                emplois_du_temps_profs[le_prof][jour]["Matin"][i] = {
+                                    'classe': classe, 'salle': "Terrain"
+                                }
+                                emplois_du_temps_profs[le_prof][jour]["Matin"][i+1] = {
+                                    'classe': classe, 'salle': "Terrain"
+                                }
+                                eps_placee = True
+                                break
+                
+                # Sinon essayer l'après-midi
+                if not eps_placee and "Soir" in emplois_du_temps_classes[classe][jour]:
+                    for i in range(1, 4):  # Positions 1-3 pour éviter H6 si matin complet
+                        if all(emplois_du_temps_classes[classe][jour]["Soir"][j] is None for j in range(i, min(i+2, 5))):
+                            # Vérifier disponibilité du prof
+                            if (le_prof in emplois_du_temps_profs and
+                                "Soir" in emplois_du_temps_profs[le_prof][jour] and
+                                emplois_du_temps_profs[le_prof][jour]["Soir"][i] is None and 
+                                emplois_du_temps_profs[le_prof][jour]["Soir"][i+1] is None):
+                                
+                                emplois_du_temps_classes[classe][jour]["Soir"][i] = {
+                                    "prof": le_prof, "matiere": "EPS", "salle": "Terrain"
+                                }
+                                emplois_du_temps_classes[classe][jour]["Soir"][i+1] = {
+                                    "prof": le_prof, "matiere": "EPS", "salle": "Terrain"
+                                }
+                                emplois_du_temps_profs[le_prof][jour]["Soir"][i] = {
+                                    'classe': classe, 'salle': "Terrain"
+                                }
+                                emplois_du_temps_profs[le_prof][jour]["Soir"][i+1] = {
+                                    'classe': classe, 'salle': "Terrain"
+                                }
+                                eps_placee = True
+                                break
+        
+        if not eps_placee:
+            print(f"⚠️  Impossible de placer l'EPS pour la classe {classe}")
+    
+    print("✅ Cours d'EPS ajoutés")
+    return emplois_du_temps_classes, emplois_du_temps_profs
 
 def genere_emploi_du_temps():
     # Valider les préconditions
     try:
         validate_for_generation()
+        print("✅ Validation réussie")
     except ValidationError as e:
         # afficher l'erreur et sortir proprement
-        print(f"Erreur de validation avant génération : {e}")
+        print(f"❌ Erreur de validation avant génération : {e}")
         return
+    except Exception as e:
+        print(f"❌ Erreur inattendue lors de la validation : {e}")
+        import traceback
+        traceback.print_exc()
+        return
+    
+    print("🚀 Démarrage de la génération...")
 
-    # première tentative : solver CSP heuristique (plus efficace)
-    if solve_emplois is not None:
+    # Désactiver temporairement le nouveau solveur pour utiliser l'algorithme original amélioré
+    use_new_solver = False
+    if use_new_solver and solve_emplois is not None:
         try:
             res = solve_emplois(emplois_du_temps_classes_or, emplois_du_temps_profs_or, emplois_du_temps_salles_or)
             if res is not None:
                 emplois_du_temps_classes, emplois_du_temps_profs, edt_salles = res
-                # génération PDF et sortie
+                
+                # Ajouter les cours d'EPS
+                emplois_du_temps_classes, emplois_du_temps_profs = ajouter_eps_aux_emplois(
+                    emplois_du_temps_classes, emplois_du_temps_profs
+                )
+                
+                # Génération PDF pour les classes
+                print("📄 Génération des emplois du temps des classes...")
                 lesEmploisDeTpsClasses = LesEmploisDeTpsClasses()
                 for classe in emplois_du_temps_classes:
                     lesEmploisDeTpsClasses.rediger_edt(classe, emplois_du_temps_classes[classe])
                 lesEmploisDeTpsClasses.output("lesEmploisDeTpsClasses.pdf")
+                print("✅ PDF des classes généré : lesEmploisDeTpsClasses.pdf")
+                
+                # Génération PDF pour les professeurs
+                print("📄 Génération des emplois du temps des professeurs...")
+                lesEmploisDeTpsProfs = LesEmploisDeTpsProfs()
+                for prof_id in emplois_du_temps_profs:
+                    # Trouver le nom du professeur
+                    prof_nom = None
+                    for matiere in Les_interfaces.noms_professeurs:
+                        if prof_id in Les_interfaces.noms_professeurs[matiere]:
+                            prof_nom = Les_interfaces.noms_professeurs[matiere][prof_id]
+                            break
+                    lesEmploisDeTpsProfs.rediger_edt(prof_id, prof_nom, emplois_du_temps_profs[prof_id])
+                lesEmploisDeTpsProfs.output("lesEmploisDeTpsProfs.pdf")
+                print("✅ PDF des professeurs généré : lesEmploisDeTpsProfs.pdf")
+                
+                print("\n🎉 Génération terminée avec succès !")
                 return
-        except Exception:
+        except Exception as e:
             # si le solveur échoue, on retombe sur l'algorithme original
+            print(f"⚠️  Le solveur amélioré a échoué : {e}")
+            import traceback
+            traceback.print_exc()
             pass
 
     emplois_du_temps_classes = copy.deepcopy(emplois_du_temps_classes_or)
     emplois_du_temps_profs = copy.deepcopy(emplois_du_temps_profs_or)
     edt_salles = copy.deepcopy(emplois_du_temps_salles_or)
     arreter_tout = False
+    
+    print("📚 Génération des emplois du temps (hors EPS)...")
+    
     for niveau in Les_interfaces.niveaux_classes:
-        del Les_interfaces.matieres_seances[niveau]['EPS']
-        # Filter subjects that have at least one professor assigned
-        filtered_matieres = {matiere: seances for matiere, seances in Les_interfaces.matieres_seances[niveau].items() if matiere in Les_interfaces.repartition_classes and any(Les_interfaces.repartition_classes[matiere].values())}
+        # Filter subjects that have at least one professor assigned (sans EPS)
+        filtered_matieres = {
+            matiere: seances 
+            for matiere, seances in Les_interfaces.matieres_seances[niveau].items() 
+            if matiere != 'EPS' and matiere in Les_interfaces.repartition_classes 
+            and any(Les_interfaces.repartition_classes[matiere].values())
+        }
         items = list(filtered_matieres.items())
-        perms = permutations(items)
-        les_permut_n = [dict(perm) for perm in perms]
+        
+        if not items:
+            print(f"⚠️  Niveau {niveau}: aucune matière à placer")
+            continue
+        
+        print(f"\n📖 Traitement du niveau {niveau} - {len(items)} matières")
+        
+        # Limiter le nombre de permutations (factorielle peut être énorme!)
+        # 7 matières = 5040 permutations, 8 matières = 40320 permutations
+        import random
+        MAX_PERMUTATIONS = 100  # Limiter à 100 permutations aléatoires
+        
+        all_perms = list(permutations(items))
+        if len(all_perms) > MAX_PERMUTATIONS:
+            random.shuffle(all_perms)
+            les_permut_n = [dict(perm) for perm in all_perms[:MAX_PERMUTATIONS]]
+            print(f"  Utilisation de {MAX_PERMUTATIONS} permutations aléatoires sur {len(all_perms)}")
+        else:
+            les_permut_n = [dict(perm) for perm in all_perms]
+            print(f"  Utilisation de toutes les {len(les_permut_n)} permutations")
         for classe in Les_interfaces.niveaux_classes[niveau]:
+            print(f"  - Classe {classe}...")
             s_d = la_salle_dediee(classe)
             les_permut_c = iter([copy.deepcopy(perm_n) for perm_n in les_permut_n])
-            les_tab_de_seances_de_classe = next(les_permut_c)
+            les_tab_de_seances_de_classe = next(les_permut_c, None)
+            
+            if les_tab_de_seances_de_classe is None:
+                print(f"    ❌ Aucune permutation disponible")
+                arreter_tout = True
+                break
             les_profs_de_la_classe = {}
             # Filtrer les matières qui ont des professeurs assignés
             matieres_avec_profs = {mat: seances for mat, seances in les_tab_de_seances_de_classe.items() if len(Les_interfaces.repartition_classes.get(mat, {})) > 0}
@@ -129,13 +295,18 @@ def genere_emploi_du_temps():
                                                 edt_salles[salle][jour_][moment_][i] = None
                             les_tab_de_seances_de_classe = next(les_permut_c)
                         except StopIteration:
+                            print(f"    ❌ Échec: toutes les permutations épuisées")
                             arreter_tout = True
                             reprendre_edt = False
             if arreter_tout:
+                print(f"    ⚠️  Arrêt du traitement de la classe {classe}")
                 break
         if arreter_tout:
+            print(f"\n⚠️  Arrêt pour le niveau {niveau} - génération partielle")
             break
+    
     if not arreter_tout:
+        print("\n✅ Génération complète réussie pour tous les niveaux !")
         le_prof_d_eps_de = {}
         niveau_classe = {}
         for classe in emplois_du_temps_classes:
@@ -189,8 +360,50 @@ def genere_emploi_du_temps():
                                 break
                     if classe_svt:
                         break
-                        
+    else:
+        print("\n⚠️  Génération partielle - Certaines classes n'ont pas pu être complétées")
+    
+    # Générer les PDFs même si la génération est partielle
+    print("\n" + "=" * 70)
+    
+    # Ajouter les cours d'EPS
+    print("📚 Ajout des cours d'EPS...")
+    try:
+        emplois_du_temps_classes, emplois_du_temps_profs = ajouter_eps_aux_emplois(
+            emplois_du_temps_classes, emplois_du_temps_profs
+        )
+    except Exception as e:
+        print(f"⚠️  Erreur lors de l'ajout de l'EPS : {e}")
+    
+    # Génération PDF pour les classes
+    print("📄 Génération des emplois du temps des classes...")
+    try:
         lesEmploisDeTpsClasses = LesEmploisDeTpsClasses()
         for classe in emplois_du_temps_classes:
             lesEmploisDeTpsClasses.rediger_edt(classe, emplois_du_temps_classes[classe])
         lesEmploisDeTpsClasses.output("lesEmploisDeTpsClasses.pdf")
+        print("✅ PDF des classes généré : lesEmploisDeTpsClasses.pdf")
+    except Exception as e:
+        print(f"❌ Erreur lors de la génération du PDF des classes : {e}")
+    
+    # Génération PDF pour les professeurs
+    print("📄 Génération des emplois du temps des professeurs...")
+    try:
+        lesEmploisDeTpsProfs = LesEmploisDeTpsProfs()
+        for prof_id in emplois_du_temps_profs:
+            # Trouver le nom du professeur
+            prof_nom = None
+            for matiere in Les_interfaces.noms_professeurs:
+                if prof_id in Les_interfaces.noms_professeurs[matiere]:
+                    prof_nom = Les_interfaces.noms_professeurs[matiere][prof_id]
+                    break
+            lesEmploisDeTpsProfs.rediger_edt(prof_id, prof_nom, emplois_du_temps_profs[prof_id])
+        lesEmploisDeTpsProfs.output("lesEmploisDeTpsProfs.pdf")
+        print("✅ PDF des professeurs généré : lesEmploisDeTpsProfs.pdf")
+    except Exception as e:
+        print(f"❌ Erreur lors de la génération du PDF des professeurs : {e}")
+    
+    if not arreter_tout:
+        print("\n🎉 Génération terminée avec succès !")
+    else:
+        print("\n⚠️  Génération partielle terminée (certaines classes incomplètes)")
