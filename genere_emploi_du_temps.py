@@ -10,6 +10,17 @@ except Exception:
     solve_emplois = None
 from app.model.validation import validate_for_generation, ValidationError
 
+# Importer le nouveau moteur optimisé
+try:
+    from fast_scheduler import generate_fast_schedule
+    from optimized_scheduler import generate_optimized_schedule
+    USE_OPTIMIZED_SCHEDULER = True
+    USE_FAST_SCHEDULER = True
+except Exception as e:
+    print(f"⚠️  Impossible d'importer le moteur optimisé: {e}")
+    USE_OPTIMIZED_SCHEDULER = False
+    USE_FAST_SCHEDULER = False
+
 
 def ajouter_eps_aux_emplois(emplois_du_temps_classes, emplois_du_temps_profs):
     """Ajouter les cours d'EPS aux emplois du temps"""
@@ -125,6 +136,51 @@ def genere_emploi_du_temps():
         return
     
     print("🚀 Démarrage de la génération...")
+    
+    # Essayer d'abord le moteur rapide (fast scheduler)
+    if USE_FAST_SCHEDULER:
+        print("⚡ Utilisation du moteur de génération rapide...")
+        try:
+            result = generate_fast_schedule()
+            if result is not None:
+                emplois_du_temps_classes, emplois_du_temps_profs, edt_salles = result
+                
+                # Génération PDF pour les classes
+                print("\n" + "=" * 70)
+                print("📄 Génération des emplois du temps des classes...")
+                try:
+                    lesEmploisDeTpsClasses = LesEmploisDeTpsClasses()
+                    for classe in emplois_du_temps_classes:
+                        lesEmploisDeTpsClasses.rediger_edt(classe, emplois_du_temps_classes[classe])
+                    lesEmploisDeTpsClasses.output("lesEmploisDeTpsClasses.pdf")
+                    print("✅ PDF des classes généré : lesEmploisDeTpsClasses.pdf")
+                except Exception as e:
+                    print(f"❌ Erreur lors de la génération du PDF des classes : {e}")
+                
+                # Génération PDF pour les professeurs
+                print("📄 Génération des emplois du temps des professeurs...")
+                try:
+                    lesEmploisDeTpsProfs = LesEmploisDeTpsProfs()
+                    for prof_id in emplois_du_temps_profs:
+                        # Trouver le nom du professeur
+                        prof_nom = None
+                        for matiere in Les_interfaces.noms_professeurs:
+                            if prof_id in Les_interfaces.noms_professeurs[matiere]:
+                                prof_nom = Les_interfaces.noms_professeurs[matiere][prof_id]
+                                break
+                        lesEmploisDeTpsProfs.rediger_edt(prof_id, prof_nom, emplois_du_temps_profs[prof_id])
+                    lesEmploisDeTpsProfs.output("lesEmploisDeTpsProfs.pdf")
+                    print("✅ PDF des professeurs généré : lesEmploisDeTpsProfs.pdf")
+                except Exception as e:
+                    print(f"❌ Erreur lors de la génération du PDF des professeurs : {e}")
+                
+                print("\n🎉 Génération terminée avec succès avec le moteur optimisé !")
+                return
+        except Exception as e:
+            print(f"⚠️  Le moteur optimisé a échoué : {e}")
+            print("📌 Basculement vers l'algorithme original...")
+            import traceback
+            traceback.print_exc()
 
     # Désactiver temporairement le nouveau solveur pour utiliser l'algorithme original amélioré
     use_new_solver = False
